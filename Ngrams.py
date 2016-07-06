@@ -8,12 +8,11 @@ class Ngram:
         self.makeDB()
 
     def makeWordList(self,doc):
-        with open(doc, 'r') as f:            
-            self.words = re.findall("(?<=[A-Za-z]\s)[A-Za-z']+|[.!?]", f.read())         
-        with open(doc, 'r') as g:
-            self.startWords = [g.read().split()[0]]
-        with open(doc, 'r') as h:
-            self.startWords += re.findall("(?<=[.?!]\s)[A-Z][a-z']+|(?<=[\n])[A-Z][a-z']+", h.read())
+        with open(doc, 'r') as f:  
+            x = f.read()
+            self.words = re.findall("(?<=[A-Za-z]\s)[A-Za-z']+|[.!?]", x)         
+            self.startWords = [x.split()[0]]
+            self.startWords += re.findall("(?<=[.?!]\s)[A-Z][a-z']+|(?<=[\n])[A-Z][a-z']+", x)
             
             
 
