@@ -11,11 +11,16 @@ class Ngram:
         with open(doc, 'r') as f:  
             x = f.read()
             self.words = re.findall("[A-Za-z']+|[.!?]", x)         
-            self.startWords = [x.split()[0]]
-            self.startWords += re.findall("(?<=[.?!]\s)[A-Z][a-z']+|(?<=[\n])[A-Z][a-z']+", x)
-            
-            
+            self.makeStartTokens(x)
 
+    def makeStartTokens(self, doc):
+        #self.startWords = [tuple(doc.split()[0:(self.N-1)])]
+        #self.startWords += re.findall("(?<=[.?!]\s)[A-Z][a-z']+|(?<=[\n])[A-Z][a-z']+", doc)
+        words = re.findall("[A-Za-z']+|[.!?]", doc)
+        ind = [0] + [i+1 for i, j in enumerate(words) if re.search("[.!?]", j)]
+        self.startWords = [tuple(words[i:i+(self.N-1)]) for i in ind]
+            
+            
     def grams(self):
         for i in range(len(self.words) - (self.N -1)):
             chunk = self.words[i:(i+self.N)]
@@ -30,14 +35,19 @@ class Ngram:
                 self.db[k] = [v]
 
     def makeSentence(self):
-        sentence = [random.choice(self.startWords)]
+        start_token = random.choice(self.startWords)
+        print(start_token)
+        sentence = [w for w in start_token]
+        print(sentence)
+        state = sentence[-(self.N-1):][0]
+        print(state)
         while True:
-            state = tuple(sentence[-(self.N-1):])
             next_word = random.choice(self.db[state])
             if re.match("[.!?]", next_word):
+                print(sentence)
                 return " ".join(sentence)+ next_word
             sentence.append(next_word)
-    
+            state = tuple(sentence[-(self.N-1):])
     
 #ngram1 = Ngram("test.txt")
 
@@ -50,9 +60,10 @@ class Ngram:
 
 if __name__ == "__main__":
   n = Ngram("test.txt")
-  #print(n.words)
   #print(n.db)
+  #print(n.words)
   #print(set([tuple([x]) for x in n.words]) - set(n.db.keys()))
+  #print(n.startWords)
   print(n.makeSentence())
   
 
