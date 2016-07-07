@@ -10,14 +10,14 @@ class Ngram:
     def makeWordList(self,doc):
         with open(doc, 'r') as f:  
             x = f.read()
-            self.words = re.findall("(?<=[A-Za-z]\s)[A-Za-z']+|[.!?]", x)         
+            self.words = re.findall("[A-Za-z']+|[.!?]", x)         
             self.startWords = [x.split()[0]]
             self.startWords += re.findall("(?<=[.?!]\s)[A-Z][a-z']+|(?<=[\n])[A-Z][a-z']+", x)
             
             
 
     def grams(self):
-        for i in range(len(self.words) - (self.N-1)):
+        for i in range(len(self.words) - (self.N -1)):
             chunk = self.words[i:(i+self.N)]
             yield tuple(chunk[:-1]), chunk[-1]
 
@@ -30,7 +30,7 @@ class Ngram:
                 self.db[k] = [v]
 
     def makeSentence(self):
-        sentence = list(random.choice(list(self.db.keys())))
+        sentence = [random.choice(self.startWords)]
         while True:
             state = tuple(sentence[-(self.N-1):])
             next_word = random.choice(self.db[state])
@@ -39,13 +39,21 @@ class Ngram:
             sentence.append(next_word)
     
     
-ngram1 = Ngram("test.txt")
+#ngram1 = Ngram("test.txt")
 
-print("startWords", ngram1.startWords)
-print("words",ngram1.words)
+#print("startWords", ngram1.startWords)
+#print("words",ngram1.words)
 
 #print(ngram1.db)
 
 #print(ngram1.makeSentence())
+
+if __name__ == "__main__":
+  n = Ngram("test.txt")
+  #print(n.words)
+  #print(n.db)
+  #print(set([tuple([x]) for x in n.words]) - set(n.db.keys()))
+  print(n.makeSentence())
+  
 
 
