@@ -49,39 +49,45 @@ class Ngram:
             else:
                 self.db[k] = [v]
 
-    def makeSentence(self):
+    def makeSentence(self, minLength=3, maxLength=20):
         # Generates a new Markov sentence from the database
         
         # Select the first word(s)
         start_token = random.choice(self.startWords)
-        print('START_TOKEN',start_token)
+        #print('START_TOKEN',start_token)
 
         # Begin creating the sentence
         sentence = [w for w in start_token]
-        print('SENTENCE', sentence)
+        #print('SENTENCE', sentence)
 
         # Initialize the current state (as a tuple)
         state = start_token
-        print('STATE',state)
+        #print('STATE',state)
         
         while True:
             # Pick the next word from the dictionary, with state as key
             next_word = random.choice(self.db[state])
             if re.match("[.!?]", next_word):
                 # If a closing punctuation is chosen, end the sentence
-                print(sentence)
-                return " ".join(sentence)+ next_word
+                #print(sentence)
+                return " ".join(sentence) + next_word
+            #sentence.append(next_word)
+            if len(sentence) > maxLength:
+                # If the max length is reached, add period and end sentence
+                #sentence.append(next_word)
+                #print(sentence)
+                return " ".join(sentence) + '.'
             sentence.append(next_word)
             state = tuple(sentence[-(self.N-1):])
 
 
 if __name__ == "__main__":
-    n = Ngram("test.txt")
-    print('WORDS\n',n.words,'\n')
-    print('STARTWORDS\n',n.startWords,'\n')
-    print('DATABASE','\n',n.db,'\n')
+    n = Ngram("KingJamesBible.rtf")
+    #print('WORDS\n',n.words,'\n')
+    #print('STARTWORDS\n',n.startWords,'\n')
+    #print('DATABASE','\n',n.db,'\n')
     #print(set([tuple([x]) for x in n.words]) - set(n.db.keys()))
-    for i in range(0,5):
+    for i in range(0,20):
       print(n.makeSentence(),'\n')
   
 
