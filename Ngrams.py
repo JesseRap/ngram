@@ -82,7 +82,7 @@ class Ngram:
 
 
 if __name__ == "__main__":
-    n = Ngram("KingJamesBible.rtf")
+    n = Ngram("BookOfMormon.txt")
     #print('WORDS\n',n.words,'\n')
     #print('STARTWORDS\n',n.startWords,'\n')
     #print('DATABASE','\n',n.db,'\n')
