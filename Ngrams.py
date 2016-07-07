@@ -1,5 +1,4 @@
-import random
-import re
+import random, re, sys
 
 class Ngram:
     def __init__(self, doc, n=2):
@@ -82,7 +81,8 @@ class Ngram:
 
 
 if __name__ == "__main__":
-    n = Ngram("BookOfMormon.txt")
+    f = str(sys.argv[1])
+    n = Ngram(f)
     #print('WORDS\n',n.words,'\n')
     #print('STARTWORDS\n',n.startWords,'\n')
     #print('DATABASE','\n',n.db,'\n')
